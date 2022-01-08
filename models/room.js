@@ -9,9 +9,9 @@ const roomSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, 'Room name cannot exceed 100 characters'],
   },
-  price: {
+  pricePerNight: {
     type: Number,
-    required: [true, 'Please enter room price'],
+    required: [true, 'Please enter room price per night'],
     maxlength: [5, 'Room price cannot exceed 5 characters'],
     default: 0.0,
   },
@@ -88,7 +88,7 @@ const roomSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',
-    required: true,
+    // required: true,
   },
   createdAt: {
     type: Date,
@@ -96,4 +96,4 @@ const roomSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model.Room || mongoose.model('Room', roomSchema);
+export default mongoose.models.Room || mongoose.model('Room', roomSchema);
