@@ -9,7 +9,7 @@ const Header = () => {
         <div className="col-3 p-0">
           <div className="navbar-brand">
             <img
-              style={{ cursor: 'pointer' }}
+              style={{ cursor: 'pointer', width: '10rem' }}
               src="/images/logo.png"
               alt="scapes"
             />
@@ -17,7 +17,7 @@ const Header = () => {
         </div>
 
         <div className="col-3 mt-3 mt-md-0 text-center">
-          <a className="btn btn-danger px-4 text-white login-header-btn float-right">
+          <a className="btn btn-primary px-4 text-white login-header-btn float-right">
             Login
           </a>
         </div>
