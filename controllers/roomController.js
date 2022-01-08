@@ -19,6 +19,29 @@ export const getAllRooms = async (req, res) => {
   }
 };
 
+// GET SINGLE ROOM
+export const getSingleRoom = async (req, res) => {
+  try {
+    const room = await Room.findById(req.query.id);
+    if (!room) {
+      return res.status(404).json({
+        success: false,
+        error: 'Room with that id does not exist',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      room,
+    });
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // CREATE A NEW ROOM
 export const newRoom = async (req, res) => {
   try {
