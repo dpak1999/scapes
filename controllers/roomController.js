@@ -16,12 +16,22 @@ export const newRoom = catchAsyncErrors(async (req, res) => {
 
 // GET ALL ROOMS
 export const getAllRooms = catchAsyncErrors(async (req, res) => {
+  const resultsPerPage = 4;
+  const roomCount = await Room.countDocuments();
+
   const apiFeatures = new APIFeatures(Room.find(), req.query).search().filter();
-  const rooms = await apiFeatures.query;
+
+  let rooms = await apiFeatures.query;
+  let filteredRoomsCount = rooms.length;
+
+  apiFeatures.pagination(resultsPerPage);
+  rooms = await apiFeatures.query;
 
   res.status(200).json({
     success: true,
-    count: rooms.length,
+    roomCount,
+    resultsPerPage,
+    filteredRoomsCount,
     rooms,
   });
 });

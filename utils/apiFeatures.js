@@ -22,12 +22,18 @@ class APIFeatures {
 
   filter() {
     const queryCopy = { ...this.queryStr };
-    console.log(queryCopy);
-    const removeFields = ['location'];
+    const removeFields = ['location', 'page'];
     removeFields.forEach((el) => delete queryCopy[el]);
-    console.log(queryCopy);
 
     this.query = this.query.find(queryCopy);
+    return this;
+  }
+
+  pagination(resultsPerPage) {
+    const currentPage = Number(this.queryStr.page) || 1;
+    const skip = resultsPerPage * (currentPage - 1);
+
+    this.query = this.query.clone().limit(resultsPerPage).skip(skip);
     return this;
   }
 }
