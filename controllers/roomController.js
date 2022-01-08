@@ -1,6 +1,7 @@
 /** @format */
 
 import Room from '../models/room';
+import ErrorHandler from '../utils/errorHandler';
 
 // CREATE A NEW ROOM
 export const newRoom = async (req, res) => {
@@ -36,14 +37,11 @@ export const getAllRooms = async (req, res) => {
 };
 
 // GET SINGLE ROOM
-export const getSingleRoom = async (req, res) => {
+export const getSingleRoom = async (req, res, next) => {
   try {
     const room = await Room.findById(req.query.id);
     if (!room) {
-      return res.status(404).json({
-        success: false,
-        error: 'Room with that id does not exist',
-      });
+      return next(new ErrorHandler('Room with that id does not exist', 404));
     }
 
     res.status(200).json({
@@ -63,10 +61,7 @@ export const updateRoom = async (req, res) => {
   try {
     let room = await Room.findById(req.query.id);
     if (!room) {
-      return res.status(404).json({
-        success: false,
-        error: 'Room with that id does not exist',
-      });
+      return next(new ErrorHandler('Room with that id does not exist', 404));
     }
 
     room = await Room.findByIdAndUpdate(req.query.id, req.body, {
@@ -91,10 +86,7 @@ export const deleteRoom = async (req, res) => {
   try {
     let room = await Room.findById(req.query.id);
     if (!room) {
-      return res.status(404).json({
-        success: false,
-        error: 'Room with that id does not exist',
-      });
+      return next(new ErrorHandler('Room with that id does not exist', 404));
     }
 
     await room.remove();
