@@ -10,8 +10,9 @@ import {
 
 export const getRooms = (req) => async (dispatch) => {
   try {
-    const { origin } = absoluteUrl(req);
-    const { data } = await axios.get(`${origin}/api/rooms`);
+    // const { origin } = absoluteUrl(req);
+    // console.log(origin);
+    const { data } = await axios.get(`${process.env.API_URI}/rooms`);
 
     dispatch({
       type: ALL_ROOMS_SUCCESS,
