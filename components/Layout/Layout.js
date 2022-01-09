@@ -1,6 +1,8 @@
 /** @format */
 
 import Head from 'next/head';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -14,6 +16,7 @@ const Layout = ({ children, title = 'Book best hotels for your holiday' }) => {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
       </Head>
       <Header />
+      <ToastContainer />
       {children}
       <Footer />
     </div>
