@@ -20,7 +20,7 @@ export const getRooms = () => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: ALL_ROOMS_FAIL,
-      payload: error.response.data.message,
+      payload: error.response?.data.message,
     });
   }
 };
