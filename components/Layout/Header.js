@@ -1,6 +1,6 @@
 /** @format */
 
-import React from 'react';
+import Link from 'next/link';
 
 const Header = () => {
   return (
@@ -8,11 +8,13 @@ const Header = () => {
       <div className="container">
         <div className="col-3 p-0">
           <div className="navbar-brand">
-            <img
-              style={{ cursor: 'pointer', width: '10rem' }}
-              src="/images/logo.png"
-              alt="scapes"
-            />
+            <Link href="/">
+              <img
+                style={{ cursor: 'pointer', width: '10rem' }}
+                src="/images/logo.png"
+                alt="scapes"
+              />
+            </Link>
           </div>
         </div>
 
