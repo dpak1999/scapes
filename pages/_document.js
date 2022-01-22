@@ -1,4 +1,5 @@
 /** @format */
+/* eslint-disable @next/next/no-sync-scripts */
 
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
