@@ -10,11 +10,11 @@ import {
 } from '../constants/roomConstants';
 
 export const getRooms =
-  (currentPage = 1) =>
+  (currentPage = 1, location = '') =>
   async (dispatch) => {
     try {
       const { data } = await axios.get(
-        `${process.env.API_URI}/rooms?page=${currentPage}`
+        `${process.env.API_URI}/rooms?page=${currentPage}&location=${location}`
       );
 
       dispatch({

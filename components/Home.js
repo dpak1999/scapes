@@ -10,13 +10,17 @@ import RoomItem from './room/RoomItem';
 import Link from 'next/link';
 
 const Home = () => {
-  const { roomCount, resultsPerPage, rooms, error } = useSelector(
-    (state) => state.allRooms
-  );
+  const { roomCount, resultsPerPage, rooms, error, filteredRoomsCount } =
+    useSelector((state) => state.allRooms);
   const dispatch = useDispatch();
   const router = useRouter();
-  let { page = 1 } = router.query;
+  let { page = 1, location } = router.query;
   page = Number(page);
+
+  let count = roomCount;
+  if (location) {
+    count = filteredRoomsCount;
+  }
 
   const handlePagination = (pageNumber) => {
     window.location.href = `/?page=${pageNumber}`;
@@ -33,7 +37,14 @@ const Home = () => {
   return (
     <>
       <section id="rooms" className="container mt-5">
-        <h2 className="mb-3 ml-2 stays-heading">Stays in New York</h2>
+        <h2 className="mb-3 ml-2 stays-heading">
+          {location
+            ? `Rooms is ${
+                location.charAt(0).toUpperCase() +
+                location.slice(1).toLowerCase()
+              }`
+            : ``}
+        </h2>
         <Link href={'/search'}>
           <a className="ml-2 back-to-search">
             <i className="fa fa-arrow-left"></i> Back to Search
@@ -54,7 +65,7 @@ const Home = () => {
         )}
       </section>
 
-      {resultsPerPage < roomCount && (
+      {resultsPerPage < count && (
         <div className="d-flex justify-content-center mt-5">
           <Pagination
             activePage={page}
