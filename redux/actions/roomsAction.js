@@ -12,7 +12,6 @@ import {
 export const getRooms =
   (currentPage = 1) =>
   async (dispatch) => {
-    // console.log('currentPage', currentPage);
     try {
       const { data } = await axios.get(
         `${process.env.API_URI}/rooms?page=${currentPage}`
