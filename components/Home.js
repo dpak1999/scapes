@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
 import { clearErrors } from '../redux/actions/roomsAction';
 import RoomItem from './room/RoomItem';
+import Link from 'next/link';
 
 const Home = () => {
   const { roomCount, resultsPerPage, rooms, error } = useSelector(
@@ -33,10 +34,11 @@ const Home = () => {
     <>
       <section id="rooms" className="container mt-5">
         <h2 className="mb-3 ml-2 stays-heading">Stays in New York</h2>
-
-        <a href="#" className="ml-2 back-to-search">
-          <i className="fa fa-arrow-left"></i> Back to Search
-        </a>
+        <Link href={'/search'}>
+          <a className="ml-2 back-to-search">
+            <i className="fa fa-arrow-left"></i> Back to Search
+          </a>
+        </Link>
         {rooms && rooms.length === 0 ? (
           <div className="alert alert-danger mt-3">
             <strong>No rooms found</strong>
