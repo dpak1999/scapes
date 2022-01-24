@@ -10,12 +10,15 @@ import {
 } from '../constants/roomConstants';
 
 export const getRooms =
-  (currentPage = 1, location = '') =>
+  (currentPage = 1, location = '', guests, category) =>
   async (dispatch) => {
     try {
-      const { data } = await axios.get(
-        `${process.env.API_URI}/rooms?page=${currentPage}&location=${location}`
-      );
+      let link = `${process.env.API_URI}/rooms?page=${currentPage}&location=${location}`;
+
+      if (guests) link = link.concat(`&guestCapacity=${guests}`);
+      if (category) link = link.concat(`&category=${category}`);
+
+      const { data } = await axios.get(link);
 
       dispatch({
         type: ALL_ROOMS_SUCCESS,

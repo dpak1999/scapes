@@ -51,7 +51,7 @@ const Home = () => {
           </a>
         </Link>
         {rooms && rooms.length === 0 ? (
-          <div className="alert alert-danger mt-3">
+          <div className="alert alert-danger mt-5">
             <strong>No rooms found</strong>
           </div>
         ) : (
