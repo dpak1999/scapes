@@ -4,10 +4,15 @@ import Link from 'next/link';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser } from '../../redux/actions/userAction';
+import { signOut } from 'next-auth/client';
 
 const Header = () => {
   const dispatch = useDispatch();
   const { user, loading } = useSelector((state) => state.auth);
+
+  const logoutHandler = () => {
+    signOut();
+  };
 
   useEffect(() => {
     dispatch(loadUser());
@@ -59,8 +64,13 @@ const Header = () => {
                   <a className="dropdown-item">Profile</a>
                 </Link>
 
-                <Link href={'/logout'}>
-                  <a className="dropdown-item">Logout</a>
+                <Link href={'/'}>
+                  <a
+                    className="dropdown-item text-danger"
+                    onClick={logoutHandler}
+                  >
+                    Logout
+                  </a>
                 </Link>
               </div>
             </div>
