@@ -1,5 +1,6 @@
 /** @format */
 
+import bcryptjs from 'bcryptjs';
 import mongoose from 'mongoose';
 import validator from 'validator';
 
@@ -43,5 +44,18 @@ const userSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// password encryption
+userSchema.pre('save', async function (next) {
+  if (!this.isModified('password')) {
+    next();
+  }
+  this.password = await bcryptjs.hash(this.password, 10);
+});
+
+// compare password
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return await bcryptjs.compare(enteredPassword, this.password);
+};
 
 module.exports = mongoose.models.User || mongoose.model('User', userSchema);
