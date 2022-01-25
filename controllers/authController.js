@@ -21,7 +21,7 @@ export const registerUser = catchAsyncErrors(async (req, res) => {
 
   const { name, email, password } = req.body;
 
-  const user = await User.create({
+  await User.create({
     name,
     email,
     password,
@@ -34,5 +34,15 @@ export const registerUser = catchAsyncErrors(async (req, res) => {
   res.status(200).json({
     success: true,
     message: 'Account registered successfully',
+  });
+});
+
+// GET USER PROFILE
+export const currentUserProfile = catchAsyncErrors(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  res.status(200).json({
+    success: true,
+    user,
   });
 });
