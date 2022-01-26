@@ -9,14 +9,18 @@ import { toast } from 'react-toastify';
 import { clearErrors } from '../../redux/actions/roomsAction';
 import RoomFeatures from './RoomFeatures';
 import DatePicker from 'react-datepicker';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const RoomDetails = () => {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
+  const [daysOfStay, setDaysOfStay] = useState('');
 
   const { room, error } = useSelector((state) => state.roomDetail);
 
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const handleChange = (dates) => {
     const [checkInDate, checkOutDate] = dates;
@@ -25,7 +29,37 @@ const RoomDetails = () => {
     setCheckOutDate(checkOutDate);
 
     if (checkInDate && checkOutDate) {
-      console.log(checkInDate.toISOString(), checkOutDate.toISOString());
+      const days = Math.floor(
+        (new Date(checkOutDate) - new Date(checkInDate)) / 86400000 + 1
+      );
+      setDaysOfStay(days);
+    }
+  };
+
+  const newBookingHandler = async () => {
+    const bookingData = {
+      room: router.query.id,
+      checkInDate,
+      checkOutDate,
+      daysOfStay,
+      amountPaid: 90,
+      paymentInfo: {
+        id: 'PAYMENT ID',
+        status: 'Paid',
+      },
+    };
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+
+      const { data } = await axios.post('/api/bookings', bookingData, config);
+      console.log(data);
+    } catch (error) {
+      console.log(error.response);
     }
   };
 
@@ -106,7 +140,12 @@ const RoomDetails = () => {
                 inline
               />
 
-              <button className="btn btn-block py-3 booking-btn">Pay</button>
+              <button
+                className="btn btn-block py-3 booking-btn"
+                onClick={newBookingHandler}
+              >
+                Pay
+              </button>
             </div>
           </div>
         </div>
