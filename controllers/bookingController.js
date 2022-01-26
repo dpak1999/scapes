@@ -27,6 +27,7 @@ export const newBooking = catchAsyncErrors(async (req, res) => {
     daysOfStay,
     amountPaid,
     paymentInfo,
+    paidAt: Date.now(),
   });
 
   res.status(200).json({
@@ -71,11 +72,19 @@ export const checkBookedDates = catchAsyncErrors(async (req, res) => {
 
   let bookedDates = [];
 
+  const timeDefference = moment().utcOffset() / 60;
+
   bookings.forEach((booking) => {
-    const range = moment.range(
-      moment(booking.checkInDate),
-      moment(booking.checkOutDate)
+    const checkInDate = moment(booking.checkInDate).add(
+      timeDefference,
+      'hours'
     );
+
+    const checkOutDate = moment(booking.checkOutDate).add(
+      timeDefference,
+      'hours'
+    );
+    const range = moment.range(moment(checkInDate), moment(checkOutDate));
 
     const dates = Array.from(range.by('day'));
     bookedDates = bookedDates.concat(dates);
