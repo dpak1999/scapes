@@ -1,6 +1,8 @@
 /** @format */
 
 import {
+  BOOKED_DATES_FAIL,
+  BOOKED_DATES_SUCCESS,
   CHECK_BOOKING_FAIL,
   CHECK_BOOKING_REQUEST,
   CHECK_BOOKING_RESET,
@@ -28,6 +30,31 @@ export const checkBookingReducer = (state = { available: null }, action) => {
       };
 
     case CHECK_BOOKING_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const bookedDatesReducer = (state = { dates: [] }, action) => {
+  switch (action.type) {
+    case BOOKED_DATES_SUCCESS:
+      return {
+        loading: false,
+        dates: action.payload,
+      };
+
+    case BOOKED_DATES_FAIL:
       return {
         loading: false,
         error: action.payload,
