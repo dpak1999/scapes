@@ -95,3 +95,13 @@ export const checkBookedDates = catchAsyncErrors(async (req, res) => {
     bookedDates,
   });
 });
+
+// GET ALL BOOKINGS OF CURRENT USER
+export const myBookings = catchAsyncErrors(async (req, res) => {
+  const bookings = await Booking.find({ user: req.user._id });
+
+  res.status(200).json({
+    success: true,
+    bookings,
+  });
+});
