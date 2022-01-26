@@ -1,6 +1,7 @@
 /** @format */
 
 import cloudinary from 'cloudinary';
+import crypto from 'crypto';
 import User from '../models/user';
 import catchAsyncErrors from '../middleware/catchAsyncErrors';
 import ErrorHandler from '../utils/errorHandler';
@@ -116,5 +117,39 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: `Email sent to ${user.email}`,
+  });
+});
+
+// RESET PASSWORD
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.query.token)
+    .digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpiry: { $gt: Date.now() },
+  });
+
+  if (!user) {
+    return next(
+      new ErrorHandler('Invalid token please request a new one', 404)
+    );
+  }
+
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(new ErrorHandler('Password does not match', 404));
+  }
+
+  user.password = req.body.password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpiry = undefined;
+
+  await user.save();
+
+  res.status(200).json({
+    success: true,
+    message: `Password update successfully`,
   });
 });
