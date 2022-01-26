@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { signIn } from 'next-auth/client';
 import { toast } from 'react-toastify';
-import ButtonLoader from '../Layout/ButtonLoader';
+import ButtonLoaderComponent from '../Layout/ButtonLoaderComponent';
 import Link from 'next/link';
 
 const Login = () => {
@@ -57,10 +57,9 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-
-            <a href="#" className="float-right mb-4">
-              Forgot Password?
-            </a>
+            <Link href={'/password/forgot'}>
+              <a className="float-right mb-4">Forgot Password?</a>
+            </Link>
 
             <button
               id="login_button"
@@ -68,7 +67,7 @@ const Login = () => {
               className="btn btn-block py-3"
               disabled={loading}
             >
-              {loading ? <ButtonLoader /> : 'LOGIN'}
+              {loading ? <ButtonLoaderComponent /> : 'LOGIN'}
             </button>
             <Link href={'/register'}>
               <a className="float-right mt-3">New User?</a>

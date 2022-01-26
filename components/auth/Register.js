@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { clearErrors, registerUser } from '../../redux/actions/userAction';
-import ButtonLoader from '../Layout/ButtonLoader';
+import ButtonLoaderComponent from '../Layout/ButtonLoaderComponent';
 
 const Register = () => {
   const [{ name, email, password }, setUser] = useState({
@@ -141,7 +141,7 @@ const Register = () => {
               className="btn btn-block py-3"
               disabled={loading}
             >
-              {loading ? <ButtonLoader /> : 'REGISTER'}
+              {loading ? <ButtonLoaderComponent /> : 'REGISTER'}
             </button>
           </form>
         </div>

@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 
 import { toast } from 'react-toastify';
-import ButtonLoader from '../layout/ButtonLoader';
+import ButtonLoaderComponent from '../Layout/ButtonLoaderComponent';
 import Loader from '../layout/Loader';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -167,7 +167,7 @@ const Profile = () => {
                   className="btn btn-block py-3"
                   disabled={updateLoading ? true : false}
                 >
-                  {updateLoading ? <ButtonLoader /> : 'UPDATE'}
+                  {updateLoading ? <ButtonLoaderComponent /> : 'UPDATE'}
                 </button>
               </form>
             </div>
