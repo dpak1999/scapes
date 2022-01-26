@@ -3,6 +3,9 @@
 import cloudinary from 'cloudinary';
 import User from '../models/user';
 import catchAsyncErrors from '../middleware/catchAsyncErrors';
+import ErrorHandler from '../utils/errorHandler';
+import absoluteUrl from 'next-absolute-url';
+import { sendEmail } from '../utils/sendEmail';
 
 // cloudinary config
 cloudinary.config({
@@ -78,5 +81,41 @@ export const updateProfile = catchAsyncErrors(async (req, res) => {
 
   res.status(200).json({
     success: true,
+  });
+});
+
+// FORGOT PASSWORD
+export const forgotPassword = catchAsyncErrors(async (req, res) => {
+  const user = await User.findOne({ email: req.body.email });
+
+  if (!user) {
+    return next(new ErrorHandler('User with that email does not exist', 404));
+  }
+
+  const resetToken = user.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+  const { origin } = absoluteUrl(req);
+
+  const resetUrl = `${origin}/password/reset/${resetToken}`;
+
+  const message = `Please click on the link to reset your password\n\n ${resetUrl} \n\n. This link is valid for 30 mins.\n\n If you have not requested this please ignore.`;
+
+  try {
+    await sendEmail({
+      email: user.email,
+      subject: 'Password recovery',
+      message,
+    });
+  } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpiry = undefined;
+    await user.save({ validateBeforeSave: false });
+    return next(new ErrorHandler(error.message, 500));
+  }
+
+  res.status(200).json({
+    success: true,
+    message: `Email sent to ${user.email}`,
   });
 });
