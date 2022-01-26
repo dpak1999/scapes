@@ -105,3 +105,21 @@ export const myBookings = catchAsyncErrors(async (req, res) => {
     bookings,
   });
 });
+
+// GET  BOOKING DETAILS
+export const getBookingDetails = catchAsyncErrors(async (req, res) => {
+  const bookings = await Booking.findById(req.query.id)
+    .populate({
+      path: 'room',
+      select: 'name pricePerNight images',
+    })
+    .populate({
+      path: 'user',
+      select: 'name email',
+    });
+
+  res.status(200).json({
+    success: true,
+    bookings,
+  });
+});
