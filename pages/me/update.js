@@ -1,9 +1,15 @@
 /** @format */
 
 import { getSession } from 'next-auth/client';
+import Layout from '../../components/Layout/Layout';
+import Profile from '../../components/user/Profile';
 
 const UpdateProfilePage = () => {
-  return <div>user profile</div>;
+  return (
+    <Layout title="Update Profile">
+      <Profile />
+    </Layout>
+  );
 };
 
 export async function getServerSideProps(context) {
