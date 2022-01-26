@@ -85,9 +85,8 @@ export const updateProfile = catchAsyncErrors(async (req, res) => {
 });
 
 // FORGOT PASSWORD
-export const forgotPassword = catchAsyncErrors(async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
-
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+  const user = await User.findOne({ email: req.body });
   if (!user) {
     return next(new ErrorHandler('User with that email does not exist', 404));
   }
