@@ -15,6 +15,8 @@ import {
   checkBooking,
   getBookedDates,
 } from '../../redux/actions/bookingAction';
+import { CHECK_BOOKING_RESET } from '../../redux/constants/bookingConstants';
+import { getStripe } from '../../utils/getStripe';
 
 const RoomDetails = () => {
   const dispatch = useDispatch();
@@ -23,6 +25,7 @@ const RoomDetails = () => {
   const [checkInDate, setCheckInDate] = useState('');
   const [checkOutDate, setCheckOutDate] = useState('');
   const [daysOfStay, setDaysOfStay] = useState('');
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   const { room, error } = useSelector((state) => state.roomDetail);
   const { dates } = useSelector((state) => state.bookedDates);
@@ -81,12 +84,36 @@ const RoomDetails = () => {
     }
   };
 
+  const bookRoom = async (id, pricePerNight) => {
+    setPaymentLoading(true);
+
+    const amount = pricePerNight * daysOfStay;
+    try {
+      const link = `/api/checkout_session/${id}?checkInDate=${checkInDate.toISOString()}&checkOutDate=${checkOutDate.toISOString()}&daysOfStay=${daysOfStay}`;
+
+      const { data } = await axios.get(link, { params: { amount } });
+
+      const stripe = await getStripe();
+
+      stripe.redirectToCheckout({ sessionId: data.id });
+      setPaymentLoading(false);
+    } catch (error) {
+      setPaymentLoading(false);
+      console.log(error);
+      toast.error(error);
+    }
+  };
+
   useEffect(() => {
     dispatch(getBookedDates(id));
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
     }
+
+    () => {
+      dispatch({ type: CHECK_BOOKING_RESET });
+    };
   }, [dispatch, error, id]);
 
   return (
@@ -182,9 +209,12 @@ const RoomDetails = () => {
               {available && user && (
                 <button
                   className="btn btn-block py-3 booking-btn"
-                  onClick={newBookingHandler}
+                  onClick={() => {
+                    bookRoom(room._id, room.pricePerNight);
+                  }}
+                  disabled={bookingLoading || paymentLoading}
                 >
-                  Pay
+                  Pay -${daysOfStay * room.pricePerNight}
                 </button>
               )}
             </div>
