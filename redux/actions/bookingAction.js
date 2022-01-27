@@ -90,7 +90,7 @@ export const bookingDetails = (authCookie, req, id) => async (dispatch) => {
 
     dispatch({
       type: BOOKING_DETAILS_SUCCESS,
-      payload: data.booking,
+      payload: data.bookings,
     });
   } catch (error) {
     dispatch({
