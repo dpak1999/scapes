@@ -29,6 +29,7 @@ const NewReview = () => {
     };
 
     dispatch(newReview(reviewData));
+    window.location.reload();
   };
 
   function setUserRatings() {
