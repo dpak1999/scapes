@@ -61,7 +61,7 @@ export const newReview = (reviewData) => async (dispatch) => {
     };
 
     const { data } = await axios.put(
-      `${process.env.API_URI}/reviews/`,
+      `${process.env.API_URI}/reviews`,
       reviewData,
       config
     );
