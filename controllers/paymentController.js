@@ -4,7 +4,6 @@ import catchAsyncErrors from '../middleware/catchAsyncErrors';
 import Room from '../models/room';
 import User from '../models/user';
 import Booking from '../models/bookings';
-import APIFeatures from '../utils/apiFeatures';
 import absoluteUrl from 'next-absolute-url';
 import getRawBody from 'raw-body';
 

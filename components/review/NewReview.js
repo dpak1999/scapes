@@ -5,7 +5,11 @@ import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { newReview, clearErrors } from '../../redux/actions/roomsAction';
+import {
+  newReview,
+  clearErrors,
+  checkReview,
+} from '../../redux/actions/roomsAction';
 import { NEW_REVIEW_RESET } from '../../redux/constants/roomConstants';
 
 const NewReview = () => {
@@ -18,6 +22,7 @@ const NewReview = () => {
   const [comment, setComment] = useState('');
 
   const { error, success } = useSelector((state) => state.newReview);
+  const { reviewAvailable } = useSelector((state) => state.checkReview);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -68,6 +73,10 @@ const NewReview = () => {
   }
 
   useEffect(() => {
+    if (id !== undefined) {
+      dispatch(checkReview(id));
+    }
+
     if (error) {
       toast.error(error);
       dispatch(clearErrors());
@@ -77,21 +86,23 @@ const NewReview = () => {
       toast.success('Review posted');
       dispatch({ type: NEW_REVIEW_RESET });
     }
-  }, [dispatch, error, success]);
+  }, [dispatch, error, success, id]);
 
   return (
     <div className="container">
       <div className="row d-flex justify-content-between">
-        <button
-          id="review_btn"
-          type="button"
-          className="btn btn-primary mt-4 mb-5"
-          data-toggle="modal"
-          data-target="#ratingModal"
-          onClick={setUserRatings}
-        >
-          Submit Your Review
-        </button>
+        {reviewAvailable && (
+          <button
+            id="review_btn"
+            type="button"
+            className="btn btn-primary mt-4 mb-5"
+            data-toggle="modal"
+            data-target="#ratingModal"
+            onClick={setUserRatings}
+          >
+            Submit Your Review
+          </button>
+        )}
 
         <div
           className="modal fade"
