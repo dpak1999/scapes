@@ -135,3 +135,13 @@ export const checkReviewAvailibility = catchAsyncErrors(async (req, res) => {
     isReviewAvailable,
   });
 });
+
+// GET ALL ROOMS - ADMIN
+export const getAllAdminRooms = catchAsyncErrors(async (req, res) => {
+  const rooms = await Room.find();
+
+  res.status(200).json({
+    success: true,
+    rooms,
+  });
+});
