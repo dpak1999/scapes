@@ -3,14 +3,22 @@
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clearErrors, getAdminRooms } from '../../redux/actions/roomsAction';
+import {
+  clearErrors,
+  getAdminRooms,
+  deleteRoom,
+} from '../../redux/actions/roomsAction';
 import Link from 'next/link';
 import { MDBDataTable } from 'mdbreact';
+import { useRouter } from 'next/router';
+import { DELETE_ROOM_RESET } from '../../redux/constants/roomConstants';
 
 const AllRooms = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const { loading, error, rooms } = useSelector((state) => state.allRooms);
+  const { error: deleteError, isDeleted } = useSelector((state) => state.room);
 
   const setRooms = () => {
     const data = {
@@ -59,7 +67,10 @@ const AllRooms = () => {
                 </a>
               </Link>
 
-              <button className="btn btn-danger mx-2">
+              <button
+                className="btn btn-danger mx-2"
+                onClick={() => deleteRoomHandler(room._id)}
+              >
                 <i className="fa fa-trash"></i>
               </button>
             </>
@@ -70,6 +81,10 @@ const AllRooms = () => {
     return data;
   };
 
+  const deleteRoomHandler = (id) => {
+    dispatch(deleteRoom(id));
+  };
+
   useEffect(() => {
     dispatch(getAdminRooms());
 
@@ -77,7 +92,17 @@ const AllRooms = () => {
       toast.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, error]);
+
+    if (deleteError) {
+      router.push('/admin/rooms');
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      router.push('/admin/rooms');
+      dispatch({ type: DELETE_ROOM_RESET });
+    }
+  }, [dispatch, error, deleteError, isDeleted, router]);
 
   return (
     <>

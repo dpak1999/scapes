@@ -81,7 +81,7 @@ export const updateRoom = catchAsyncErrors(async (req, res) => {
     let imagesLinks = [];
 
     for (let i = 0; i < req.body.images.length; i++) {
-      const result = await cloudinary.v2.uploader.upload(images[i], {
+      const result = await cloudinary.v2.uploader.upload(req.body.images[i], {
         folder: 'scapes/rooms',
       });
 
@@ -107,6 +107,10 @@ export const deleteRoom = catchAsyncErrors(async (req, res) => {
   let room = await Room.findById(req.query.id);
   if (!room) {
     return next(new ErrorHandler('Room with that id does not exist', 404));
+  }
+
+  for (let i = 0; i < room.images.length; i++) {
+    await cloudinary.v2.uploader.destroy(room.images[i].public_id);
   }
 
   await room.remove();

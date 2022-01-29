@@ -7,6 +7,10 @@ import {
   ALL_ROOMS_FAIL,
   ALL_ROOMS_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_ROOM_FAIL,
+  DELETE_ROOM_REQUEST,
+  DELETE_ROOM_RESET,
+  DELETE_ROOM_SUCCESS,
   NEW_REVIEW_FAIL,
   NEW_REVIEW_REQUEST,
   NEW_REVIEW_RESET,
@@ -194,6 +198,7 @@ export const newRoomReducer = (state = { room: {} }, action) => {
 export const roomReducer = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_ROOM_REQUEST:
+    case DELETE_ROOM_REQUEST:
       return {
         loading: true,
       };
@@ -204,12 +209,25 @@ export const roomReducer = (state = {}, action) => {
         isUpdated: action.payload,
       };
 
+    case DELETE_ROOM_SUCCESS:
+      return {
+        loading: false,
+        isDeleted: action.payload,
+      };
+
     case UPDATE_ROOM_RESET:
       return {
         isUpdated: false,
       };
 
+    case DELETE_ROOM_RESET:
+      return {
+        loading: false,
+        isDeleted: false,
+      };
+
     case UPDATE_ROOM_FAIL:
+    case DELETE_ROOM_FAIL:
       return {
         loading: false,
         error: action.payload,
