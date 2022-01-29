@@ -15,8 +15,6 @@ export const newRoom = catchAsyncErrors(async (req, res) => {
   for (let i = 0; i < images.length; i++) {
     const result = await cloudinary.v2.uploader.upload(images[i], {
       folder: 'scapes/rooms',
-      width: '150',
-      crop: 'scale',
     });
 
     imagesLinks.push({ public_id: result.public_id, url: result.secure_url });
@@ -70,8 +68,26 @@ export const getSingleRoom = catchAsyncErrors(async (req, res, next) => {
 // UPDATE ROOM
 export const updateRoom = catchAsyncErrors(async (req, res) => {
   let room = await Room.findById(req.query.id);
+  let imagesLinks = [];
+
   if (!room) {
     return next(new ErrorHandler('Room with that id does not exist', 404));
+  }
+
+  if (req.body.images) {
+    for (let i = 0; i < room.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(room.images[i].public_id);
+    }
+
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.v2.uploader.upload(images[i], {
+        folder: 'scapes/rooms',
+      });
+
+      imagesLinks.push({ public_id: result.public_id, url: result.secure_url });
+    }
+
+    req.body.images = imagesLinks;
   }
 
   room = await Room.findByIdAndUpdate(req.query.id, req.body, {

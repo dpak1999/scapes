@@ -13,6 +13,7 @@ import {
   newReviewReducer,
   newRoomReducer,
   roomDetailsReducer,
+  roomReducer,
 } from './roomReducers';
 import { authReducer, forgotPasswordReducer, userReducer } from './userReducer';
 
@@ -29,6 +30,7 @@ const reducers = combineReducers({
   newReview: newReviewReducer,
   checkReview: checkReviewReducer,
   newRoom: newRoomReducer,
+  room: roomReducer,
 });
 
 export default reducers;
