@@ -11,6 +11,10 @@ import {
   NEW_REVIEW_REQUEST,
   NEW_REVIEW_RESET,
   NEW_REVIEW_SUCCESS,
+  NEW_ROOM_FAIL,
+  NEW_ROOM_REQUEST,
+  NEW_ROOM_RESET,
+  NEW_ROOM_SUCCESS,
   REVIEW_AVAILABILTY_FAIL,
   REVIEW_AVAILABILTY_REQUEST,
   REVIEW_AVAILABILTY_SUCCESS,
@@ -131,6 +135,42 @@ export const checkReviewReducer = (
       };
 
     case REVIEW_AVAILABILTY_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const newRoomReducer = (state = { room: {} }, action) => {
+  switch (action.type) {
+    case NEW_ROOM_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case NEW_ROOM_SUCCESS:
+      return {
+        loading: false,
+        success: action.payload.success,
+        room: action.payload.room,
+      };
+
+    case NEW_ROOM_RESET:
+      return {
+        success: false,
+      };
+
+    case NEW_ROOM_FAIL:
       return {
         loading: false,
         error: action.payload,
