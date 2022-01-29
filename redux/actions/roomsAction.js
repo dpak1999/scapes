@@ -2,6 +2,9 @@
 
 import axios from 'axios';
 import {
+  ADMIN_ROOMS_FAIL,
+  ADMIN_ROOMS_REQUEST,
+  ADMIN_ROOMS_SUCCESS,
   ALL_ROOMS_FAIL,
   ALL_ROOMS_SUCCESS,
   CLEAR_ERRORS,
@@ -96,6 +99,24 @@ export const checkReview = (roomId) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: REVIEW_AVAILABILTY_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getAdminRooms = () => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_ROOMS_REQUEST });
+
+    const { data } = await axios.get(`/api/admin/rooms`);
+
+    dispatch({
+      type: ADMIN_ROOMS_SUCCESS,
+      payload: data.rooms,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_ROOMS_FAIL,
       payload: error.response.data.message,
     });
   }

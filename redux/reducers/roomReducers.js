@@ -1,6 +1,9 @@
 /** @format */
 
 import {
+  ADMIN_ROOMS_FAIL,
+  ADMIN_ROOMS_REQUEST,
+  ADMIN_ROOMS_SUCCESS,
   ALL_ROOMS_FAIL,
   ALL_ROOMS_SUCCESS,
   CLEAR_ERRORS,
@@ -17,6 +20,11 @@ import {
 
 export const allRoomsReducer = (state = { rooms: [] }, action) => {
   switch (action.type) {
+    case ADMIN_ROOMS_REQUEST:
+      return {
+        loading: true,
+      };
+
     case ALL_ROOMS_SUCCESS:
       return {
         roomCount: action.payload.roomCount,
@@ -25,7 +33,14 @@ export const allRoomsReducer = (state = { rooms: [] }, action) => {
         rooms: action.payload.rooms,
       };
 
+    case ADMIN_ROOMS_SUCCESS:
+      return {
+        loading: false,
+        rooms: action.payload,
+      };
+
     case ALL_ROOMS_FAIL:
+    case ADMIN_ROOMS_FAIL:
       return {
         error: action.payload,
       };
