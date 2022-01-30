@@ -11,7 +11,7 @@ const BookingDetails = () => {
   const dispatch = useDispatch();
 
   const { booking, error } = useSelector((state) => state.bookingDetails);
-  console.log(booking);
+  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (error) {
@@ -19,6 +19,9 @@ const BookingDetails = () => {
       dispatch(clearErrors());
     }
   }, [dispatch, error]);
+
+  const isPaid =
+    booking.paymentInfo && booking.paymentInfo.status === 'paid' ? true : false;
 
   return (
     <div className="container">
@@ -56,9 +59,18 @@ const BookingDetails = () => {
               <hr />
 
               <h4 className="my-4">Payment Status</h4>
-              <p className="greenColor">
-                <b>Paid</b>
+              <p className={isPaid ? 'greenColor' : 'redColor'}>
+                <b>{isPaid ? 'Paid' : 'Not paid'}</b>
               </p>
+
+              {user && user.role === 'Admin' && isPaid && (
+                <>
+                  <h4 className="my-4">Stripe payment Id</h4>
+                  <p className="greenColor">
+                    <b>{booking.paymentInfo.id}</b>
+                  </p>
+                </>
+              )}
 
               <h4 className="mt-5 mb-4">Booked Room:</h4>
 
