@@ -3,6 +3,9 @@
 import axios from 'axios';
 import absoluteUrl from 'next-absolute-url';
 import {
+  ADMIN_BOOKINGS_FAIL,
+  ADMIN_BOOKINGS_REQUEST,
+  ADMIN_BOOKINGS_SUCCESS,
   BOOKED_DATES_FAIL,
   BOOKED_DATES_SUCCESS,
   BOOKING_DETAILS_FAIL,
@@ -95,6 +98,24 @@ export const bookingDetails = (authCookie, req, id) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: BOOKING_DETAILS_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getAdminBookings = () => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_BOOKINGS_REQUEST });
+
+    const { data } = await axios.get(`/api/admin/bookings`);
+
+    dispatch({
+      type: ADMIN_BOOKINGS_SUCCESS,
+      payload: data.bookings,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_BOOKINGS_FAIL,
       payload: error.response.data.message,
     });
   }
