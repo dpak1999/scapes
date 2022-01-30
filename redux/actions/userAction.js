@@ -154,11 +154,11 @@ export const getAdminUsers = () => async (dispatch) => {
   try {
     dispatch({ type: ADMIN_USERS_REQUEST });
 
-    const { data } = await axios.get(`/api/admin/users/`);
+    const { data } = await axios.get(`/api/admin/users`);
 
     dispatch({
       type: ADMIN_USERS_SUCCESS,
-      payload: data.users,
+      payload: data.user,
     });
   } catch (error) {
     dispatch({
