@@ -9,12 +9,10 @@ import {
   deleteReview,
 } from '../../redux/actions/roomsAction';
 import { MDBDataTable } from 'mdbreact';
-import { useRouter } from 'next/router';
 import { DELETE_REVIEW_RESET } from '../../redux/constants/roomConstants';
 
 const RoomReviews = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
 
   const [roomId, setRoomId] = useState('');
 
