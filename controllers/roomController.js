@@ -183,3 +183,13 @@ export const getAllAdminRooms = catchAsyncErrors(async (req, res) => {
     rooms,
   });
 });
+
+// GET ALL ROOM REVIEWS - ADMIN
+export const getRoomReviews = catchAsyncErrors(async (req, res) => {
+  const room = await Room.findById(req.query.id);
+
+  res.status(200).json({
+    success: true,
+    reviews: room.reviews,
+  });
+});
