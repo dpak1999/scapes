@@ -153,3 +153,13 @@ export const resetPassword = catchAsyncErrors(async (req, res, next) => {
     message: `Password update successfully`,
   });
 });
+
+// GET ALL USERS - ADMIN
+export const allAdminUsers = catchAsyncErrors(async (req, res) => {
+  const user = await User.find();
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});

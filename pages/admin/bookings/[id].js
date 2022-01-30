@@ -19,7 +19,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     async ({ req, params }) => {
       const session = await getSession({ req });
 
-      if (!session) {
+      if (!session || session.user !== 'Admin') {
         return {
           redirect: {
             destination: '/login',

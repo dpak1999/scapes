@@ -2,6 +2,9 @@
 
 import axios from 'axios';
 import {
+  ADMIN_USERS_FAIL,
+  ADMIN_USERS_REQUEST,
+  ADMIN_USERS_SUCCESS,
   CLEAR_ERRORS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
@@ -142,6 +145,24 @@ export const resetPassword = (token, passwords) => async (dispatch) => {
   } catch (error) {
     dispatch({
       type: RESET_PASSWORD_FAIL,
+      payload: error.response.data.message,
+    });
+  }
+};
+
+export const getAdminUsers = () => async (dispatch) => {
+  try {
+    dispatch({ type: ADMIN_USERS_REQUEST });
+
+    const { data } = await axios.get(`/api/admin/users/`);
+
+    dispatch({
+      type: ADMIN_USERS_SUCCESS,
+      payload: data.users,
+    });
+  } catch (error) {
+    dispatch({
+      type: ADMIN_USERS_FAIL,
       payload: error.response.data.message,
     });
   }
