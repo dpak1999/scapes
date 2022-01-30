@@ -7,6 +7,7 @@ import {
   getSingleRoom,
   updateRoom,
 } from '../../../controllers/roomController';
+import { authorizeRoles, isAuthentcatedUser } from '../../../middleware/auth';
 import onError from '../../../middleware/errors';
 
 dbConnect();
@@ -14,7 +15,7 @@ dbConnect();
 const handler = nextConnect({ onError });
 
 handler.get(getSingleRoom);
-handler.put(updateRoom);
-handler.delete(deleteRoom);
+handler.use(isAuthentcatedUser, authorizeRoles('Admin')).put(updateRoom);
+handler.use(isAuthentcatedUser, authorizeRoles('Admin')).delete(deleteRoom);
 
 export default handler;
