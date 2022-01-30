@@ -3,11 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
-import { clearErrors, getRoomReviews } from '../../redux/actions/roomsAction';
-import Link from 'next/link';
+import {
+  clearErrors,
+  getRoomReviews,
+  deleteReview,
+} from '../../redux/actions/roomsAction';
 import { MDBDataTable } from 'mdbreact';
 import { useRouter } from 'next/router';
-// import { DELETE_USER_RESET } from '../../redux/constants/roomConstants';
+import { DELETE_REVIEW_RESET } from '../../redux/constants/roomConstants';
 
 const RoomReviews = () => {
   const dispatch = useDispatch();
@@ -16,7 +19,9 @@ const RoomReviews = () => {
   const [roomId, setRoomId] = useState('');
 
   const { loading, error, reviews } = useSelector((state) => state.roomReviews);
-  // const { isDeleted, error: deleteError } = useSelector((state) => state.user);
+  const { isDeleted, error: deleteError } = useSelector(
+    (state) => state.review
+  );
 
   const setReviews = () => {
     const data = {
@@ -58,7 +63,10 @@ const RoomReviews = () => {
           comment: review.comment,
           user: review.name,
           actions: (
-            <button className="btn btn-danger mx-2" onClick={() => {}}>
+            <button
+              className="btn btn-danger mx-2"
+              onClick={() => deleteReviewHandler(review._id)}
+            >
               <i className="fa fa-trash"></i>
             </button>
           ),
@@ -68,9 +76,9 @@ const RoomReviews = () => {
     return data;
   };
 
-  // const deleteUserHandler = (id) => {
-  //   dispatch(deleteUser(id));
-  // };
+  const deleteReviewHandler = (id) => {
+    dispatch(deleteReview(id, roomId));
+  };
 
   useEffect(() => {
     if (error) {
@@ -82,16 +90,16 @@ const RoomReviews = () => {
       dispatch(getRoomReviews(roomId));
     }
 
-    // if (deleteError) {
-    //   toast.error(deleteError);
-    //   dispatch(clearErrors());
-    // }
+    if (deleteError) {
+      toast.error(deleteError);
+      dispatch(clearErrors());
+    }
 
-    // if (isDeleted) {
-    //   router.push('/admin/users');
-    //   dispatch({ type: DELETE_USER_RESET });
-    // }
-  }, [dispatch, error, roomId]);
+    if (isDeleted) {
+      toast.success('Review deleted');
+      dispatch({ type: DELETE_REVIEW_RESET });
+    }
+  }, [dispatch, error, roomId, isDeleted, deleteError]);
 
   return (
     <>

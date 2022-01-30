@@ -193,3 +193,30 @@ export const getRoomReviews = catchAsyncErrors(async (req, res) => {
     reviews: room.reviews,
   });
 });
+
+// DELETE ROOM REVIEW - ADMIN
+export const deleteReview = catchAsyncErrors(async (req, res) => {
+  const room = await Room.findById(req.query.roomId);
+
+  const reviews = room.reviews.filter(
+    (review) => review.id.toString() !== req.query.id.toString()
+  );
+
+  const numOfReviews = reviews.length;
+  const ratings =
+    room.reviews.reduce((acc, item) => item.rating + acc, 0) / reviews.length;
+
+  await Room.findByIdAndUpdate(
+    req.query.roomId,
+    {
+      reviews,
+      ratings,
+      numOfReviews,
+    },
+    { new: true, runValidators: true, useFindAndModify: false }
+  );
+
+  res.status(200).json({
+    success: true,
+  });
+});

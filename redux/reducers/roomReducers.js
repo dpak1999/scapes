@@ -7,6 +7,10 @@ import {
   ALL_ROOMS_FAIL,
   ALL_ROOMS_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_REVIEW_FAIL,
+  DELETE_REVIEW_REQUEST,
+  DELETE_REVIEW_RESET,
+  DELETE_REVIEW_SUCCESS,
   DELETE_ROOM_FAIL,
   DELETE_ROOM_REQUEST,
   DELETE_ROOM_RESET,
@@ -261,6 +265,42 @@ export const roomReviewsReducer = (state = { reviews: [] }, action) => {
       };
 
     case GET_REVIEWS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const reviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_REVIEW_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case DELETE_REVIEW_SUCCESS:
+      return {
+        loading: false,
+        isDeleted: action.payload,
+      };
+
+    case DELETE_REVIEW_RESET:
+      return {
+        loading: false,
+        isDeleted: false,
+      };
+
+    case DELETE_REVIEW_FAIL:
       return {
         loading: false,
         error: action.payload,
