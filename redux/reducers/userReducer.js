@@ -5,6 +5,10 @@ import {
   ADMIN_USERS_REQUEST,
   ADMIN_USERS_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_USER_FAIL,
+  DELETE_USER_REQUEST,
+  DELETE_USER_RESET,
+  DELETE_USER_SUCCESS,
   FORGOT_PASSWORD_FAIL,
   FORGOT_PASSWORD_REQUEST,
   FORGOT_PASSWORD_SUCCESS,
@@ -84,6 +88,7 @@ export const userReducer = (state = {}, action) => {
   switch (action.type) {
     case UPDATE_PROFILE_REQUEST:
     case UPDATE_USER_REQUEST:
+    case DELETE_USER_REQUEST:
       return {
         loading: true,
       };
@@ -95,6 +100,12 @@ export const userReducer = (state = {}, action) => {
         isUpdated: action.payload,
       };
 
+    case DELETE_USER_SUCCESS:
+      return {
+        loading: false,
+        isDeleted: action.payload,
+      };
+
     case UPDATE_PROFILE_RESET:
     case UPDATE_USER_RESET:
       return {
@@ -102,8 +113,15 @@ export const userReducer = (state = {}, action) => {
         isUpdated: false,
       };
 
+    case DELETE_USER_RESET:
+      return {
+        loading: false,
+        isDeleted: false,
+      };
+
     case UPDATE_PROFILE_FAIL:
     case UPDATE_USER_FAIL:
+    case DELETE_USER_FAIL:
       return {
         loading: false,
         error: action.payload,
