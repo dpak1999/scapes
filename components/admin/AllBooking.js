@@ -2,19 +2,26 @@
 
 import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import {
   clearErrors,
   getAdminBookings,
+  deleteBooking,
 } from '../../redux/actions/bookingAction';
 import Link from 'next/link';
 import { MDBDataTable } from 'mdbreact';
 import easyInvoice from 'easyinvoice';
+import { DELETE_BOOKING_RESET } from '../../redux/constants/bookingConstants';
 
 const AllBookings = () => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const { bookings, error, loading } = useSelector((state) => state.bookings);
+  const { isDeleted, error: deleteError } = useSelector(
+    (state) => state.deleteBooking
+  );
 
   const setBookings = () => {
     const data = {
@@ -70,7 +77,10 @@ const AllBookings = () => {
                 <i className="fa fa-download"></i>
               </button>
 
-              <button className="btn btn-danger mx-2" onClick={() => {}}>
+              <button
+                className="btn btn-danger mx-2"
+                onClick={() => deleteBookingHandler(booking._id)}
+              >
                 <i className="fa fa-trash"></i>
               </button>
             </>
@@ -126,6 +136,10 @@ const AllBookings = () => {
     easyInvoice.download(`invoice_${booking._id}.pdf`, result.pdf);
   };
 
+  const deleteBookingHandler = (id) => {
+    dispatch(deleteBooking(id));
+  };
+
   useEffect(() => {
     dispatch(getAdminBookings());
 
@@ -133,7 +147,17 @@ const AllBookings = () => {
       toast.error(error);
       dispatch(clearErrors());
     }
-  }, [dispatch, error]);
+
+    if (deleteError) {
+      toast.error(deleteError);
+      dispatch(clearErrors());
+    }
+
+    if (isDeleted) {
+      router.push('/admin/bookings');
+      dispatch({ type: DELETE_BOOKING_RESET });
+    }
+  }, [dispatch, error, deleteError, router, isDeleted]);
 
   return (
     <div className="container container-fluid">

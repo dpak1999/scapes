@@ -149,3 +149,18 @@ export const allAdminBookings = catchAsyncErrors(async (req, res) => {
     bookings,
   });
 });
+
+// DELETE BOOKING - ADMIN
+export const deleteBooking = catchAsyncErrors(async (req, res, next) => {
+  const booking = await Booking.findById(req.query.id);
+
+  if (!booking) {
+    return next(new ErrorHandler('Booking not found with this is', 400));
+  }
+
+  await booking.remove();
+
+  res.status(200).json({
+    success: true,
+  });
+});

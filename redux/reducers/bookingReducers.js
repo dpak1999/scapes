@@ -13,6 +13,10 @@ import {
   CHECK_BOOKING_RESET,
   CHECK_BOOKING_SUCCESS,
   CLEAR_ERRORS,
+  DELETE_BOOKING_FAIL,
+  DELETE_BOOKING_REQUEST,
+  DELETE_BOOKING_RESET,
+  DELETE_BOOKING_SUCCESS,
   MY_BOOKINGS_FAIL,
   MY_BOOKINGS_SUCCESS,
 } from '../constants/bookingConstants';
@@ -119,6 +123,42 @@ export const bookingDetailsReducer = (state = { booking: {} }, action) => {
       };
 
     case BOOKING_DETAILS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+
+    case CLEAR_ERRORS:
+      return {
+        ...state,
+        error: null,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const deleteBookingReducer = (state = {}, action) => {
+  switch (action.type) {
+    case DELETE_BOOKING_REQUEST:
+      return {
+        loading: true,
+      };
+
+    case DELETE_BOOKING_SUCCESS:
+      return {
+        loading: false,
+        isDeleted: action.payload,
+      };
+
+    case DELETE_BOOKING_RESET:
+      return {
+        loading: false,
+        isDeleted: null,
+      };
+
+    case DELETE_BOOKING_FAIL:
       return {
         loading: false,
         error: action.payload,
