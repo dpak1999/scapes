@@ -78,14 +78,18 @@ const RoomReviews = () => {
     dispatch(deleteReview(id, roomId));
   };
 
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      dispatch(clearErrors());
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
     if (roomId !== '') {
       dispatch(getRoomReviews(roomId));
+    }
+  };
+
+  useEffect(() => {
+    if (error) {
+      toast.error('No room found with that id');
+      dispatch(clearErrors());
     }
 
     if (deleteError) {
@@ -100,45 +104,44 @@ const RoomReviews = () => {
   }, [dispatch, error, roomId, isDeleted, deleteError]);
 
   return (
-    <>
-      {loading ? (
-        <h1 className="d-flex justify-content-center align-item-center">
-          loading
-        </h1>
-      ) : (
-        <div className="container container-fluid">
-          <div className="row justify-content-center mt-5">
-            <div className="col-5">
-              <form>
-                <div className="form-group">
-                  <label htmlFor="room_id_field">Enter Room id</label>
-                  <input
-                    type="text"
-                    id="room_id_field"
-                    className="form-control"
-                    value={roomId}
-                    onChange={(e) => setRoomId(e.target.value)}
-                  />
-                </div>
-              </form>
+    <div className="container container-fluid">
+      <div className="row justify-content-center mt-5 mb-2">
+        <div className="col-5">
+          <form>
+            <div className="form-group">
+              <label htmlFor="room_id_field">Enter Room id</label>
+              <input
+                type="text"
+                id="room_id_field"
+                className="form-control"
+                value={roomId}
+                onChange={(e) => setRoomId(e.target.value)}
+              />
+              <button
+                onClick={handleSubmit}
+                className="btn btn-block btn-primary mt-3"
+              >
+                Submit
+              </button>
             </div>
-          </div>
-          {reviews && reviews.length > 0 ? (
-            <MDBDataTable
-              data={setReviews()}
-              className="px-3"
-              bordered
-              striped
-              hover
-            />
-          ) : (
-            <div className="alert alert-danger mt-5 text-center">
-              No reviews found for this room
-            </div>
-          )}
+          </form>
+        </div>
+      </div>
+      {reviews && reviews.length <= 0 && (
+        <div className="alert alert-danger mt-5 text-center">
+          No reviews found for this room
         </div>
       )}
-    </>
+      {reviews && reviews.length > 0 && (
+        <MDBDataTable
+          data={setReviews()}
+          className="px-3"
+          bordered
+          striped
+          hover
+        />
+      )}
+    </div>
   );
 };
 
