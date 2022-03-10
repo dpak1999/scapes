@@ -21,7 +21,7 @@ const RoomItem = ({ room }) => {
 
         <div className="ratings mt-auto mb-3">
           <p className="card-text">
-            <b>${room.pricePerNight}</b> / night
+            <b>Rs {room.pricePerNight}</b> / night
           </p>
 
           <div className="rating-outer">

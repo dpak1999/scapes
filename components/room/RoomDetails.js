@@ -172,7 +172,7 @@ const RoomDetails = () => {
           <div className="col-12 col-md-6 col-lg-4">
             <div className="booking-card shadow-lg p-4">
               <p className="price-per-night">
-                <b>${room.pricePerNight}</b> / night
+                <b>Rs {room.pricePerNight}</b> / night
               </p>
               <hr />
               <p className="mt-5 mb-3">Pick Check In & Check Out Date</p>
@@ -215,7 +215,7 @@ const RoomDetails = () => {
                   }}
                   disabled={bookingLoading || paymentLoading}
                 >
-                  Pay -${daysOfStay * room.pricePerNight}
+                  Pay -Rs {daysOfStay * room.pricePerNight}
                 </button>
               )}
             </div>

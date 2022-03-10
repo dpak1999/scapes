@@ -51,7 +51,7 @@ const MyBookings = () => {
           id: booking._id,
           checkIn: new Date(booking.checkInDate).toLocaleString('en-US'),
           checkOut: new Date(booking.checkOutDate).toLocaleString('en-US'),
-          amount: `$${booking.amountPaid}`,
+          amount: `Rs ${booking.amountPaid}`,
           actions: (
             <>
               <Link href={`/bookings/${booking._id}`}>
@@ -77,7 +77,7 @@ const MyBookings = () => {
   const downloadInvoice = async (booking) => {
     const data = {
       documentTitle: 'Booking INVOICE',
-      currency: 'USD',
+      currency: 'inr',
       taxNotation: 'vat',
       marginTop: 25,
       marginRight: 25,
